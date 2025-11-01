@@ -1,0 +1,748 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MY PRINCESS</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23ff69b4'><path d='M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z'/></svg>" type="image/svg+xml">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;700&family=Playfair+Display:wght@400;700;900&family=Cookie&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Dancing Script', cursive;
+            background: linear-gradient(135deg, #ffb6c1 0%, #ff91a4 50%, #ffc0cb 100%);
+            min-height: 100vh;
+            max-height: 100vh;
+            overflow: hidden;
+            position: relative;
+        }
+
+        /* Animated Heart Background */
+        .heart-background {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            overflow: hidden;
+        }
+
+        .floating-heart {
+            position: absolute;
+            color: rgba(255, 192, 203, 0.5);
+            font-size: 35px;
+            animation: float 20s infinite ease-in-out;
+            opacity: 0;
+        }
+
+        @keyframes float {
+            0% {
+                transform: translateY(100vh) translateX(0) rotate(0deg);
+                opacity: 0;
+            }
+            5% {
+                opacity: 0.7;
+            }
+            95% {
+                opacity: 0.7;
+            }
+            100% {
+                transform: translateY(-100px) translateX(100px) rotate(360deg);
+                opacity: 0;
+            }
+        }
+
+        .floating-heart-bottom {
+            animation: floatBottom 20s infinite ease-in-out;
+        }
+
+        @keyframes floatBottom {
+            0% {
+                transform: translateY(-100px) translateX(0) rotate(0deg);
+                opacity: 0;
+            }
+            5% {
+                opacity: 0.7;
+            }
+            95% {
+                opacity: 0.7;
+            }
+            100% {
+                transform: translateY(100vh) translateX(100px) rotate(-360deg);
+                opacity: 0;
+            }
+        }
+
+        /* Main Container */
+        .container {
+            position: relative;
+            z-index: 1;
+            height: 100vh;
+            max-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 10px 20px;
+            gap: 8px;
+            overflow: hidden;
+        }
+
+        /* Header */
+        .header {
+            text-align: center;
+            margin-bottom: 0;
+            animation: fadeInDown 1s ease-out;
+        }
+
+        .header h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(1.5rem, 4vw, 3rem);
+            font-weight: 900;
+            color: #FFD700;
+            text-shadow: 
+                2px 2px 4px rgba(0, 0, 0, 0.4),
+                0 0 15px rgba(255, 215, 0, 0.6),
+                0 0 25px rgba(255, 215, 0, 0.4);
+            margin-bottom: 0;
+            letter-spacing: 1.5px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            line-height: 1.2;
+            transition: opacity 0.8s ease;
+        }
+
+        .header.hidden {
+            display: none !important;
+        }
+
+        .header h1 .heart-emoji {
+            font-size: 0.8em;
+            animation: heartBeat 1.5s infinite;
+        }
+
+        @keyframes heartBeat {
+            0%, 100% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.2);
+            }
+        }
+
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Heart Collage Container */
+        .heart-collage-container {
+            position: relative;
+            width: min(75vw, 480px);
+            height: min(75vw, 480px);
+            margin: 5px auto;
+            animation: fadeInUp 1.5s ease-out 0.5s both;
+            flex-shrink: 1;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .heart-outline {
+            width: 100%;
+            height: 100%;
+            border: 10px solid #FFD700;
+            position: relative;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(5px);
+            box-shadow: 
+                0 0 40px rgba(255, 215, 0, 0.6),
+                inset 0 0 40px rgba(255, 215, 0, 0.3),
+                0 0 0 4px rgba(255, 215, 0, 0.3);
+            overflow: hidden;
+            animation: pulse 2s infinite ease-in-out;
+            clip-path: polygon(
+                50% 15%, 
+                65% 0%, 
+                85% 10%, 
+                100% 25%, 
+                100% 50%, 
+                85% 70%, 
+                70% 85%, 
+                50% 100%, 
+                30% 85%, 
+                15% 70%, 
+                0% 50%, 
+                0% 25%, 
+                15% 10%, 
+                35% 0%
+            );
+            transition: opacity 0.8s ease, transform 0.8s ease;
+        }
+
+        .heart-outline.fade-out {
+            opacity: 0;
+            transform: scale(0.9);
+        }
+
+        @keyframes pulse {
+            0%, 100% {
+                box-shadow: 
+                    0 0 40px rgba(255, 215, 0, 0.6),
+                    inset 0 0 40px rgba(255, 215, 0, 0.3),
+                    0 0 0 4px rgba(255, 215, 0, 0.3);
+            }
+            50% {
+                box-shadow: 
+                    0 0 60px rgba(255, 215, 0, 0.9),
+                    inset 0 0 60px rgba(255, 215, 0, 0.5),
+                    0 0 0 6px rgba(255, 215, 0, 0.5);
+            }
+        }
+
+        .collage-images {
+            position: absolute;
+            top: 8%;
+            left: 8%;
+            width: 84%;
+            height: 84%;
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            grid-template-rows: repeat(4, 1fr);
+            gap: 4px;
+            padding: 8px;
+            clip-path: polygon(
+                50% 15%, 
+                65% 0%, 
+                85% 10%, 
+                100% 25%, 
+                100% 50%, 
+                85% 70%, 
+                70% 85%, 
+                50% 100%, 
+                30% 85%, 
+                15% 70%, 
+                0% 50%, 
+                0% 25%, 
+                15% 10%, 
+                35% 0%
+            );
+        }
+
+        .collage-item {
+            position: relative;
+            overflow: hidden;
+            border-radius: 8px;
+            opacity: 0;
+            transform: scale(0.8);
+            transition: opacity 0.8s ease, transform 0.8s ease;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .collage-item.active {
+            opacity: 1;
+            transform: scale(1);
+        }
+
+        .collage-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.3s ease;
+        }
+
+        .collage-item:hover img {
+            transform: scale(1.1);
+        }
+
+        /* Shuffle Button */
+        .shuffle-btn {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 10;
+            background: linear-gradient(45deg, #FFD700, #FFC125);
+            border: 3px solid #FFD700;
+            border-radius: 50%;
+            width: 80px;
+            height: 80px;
+            font-size: 30px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 15px rgba(255, 215, 0, 0.4);
+            transition: all 0.3s ease;
+            animation: buttonPulse 2s infinite;
+        }
+
+        .shuffle-btn:hover {
+            transform: translate(-50%, -50%) scale(1.1);
+            box-shadow: 0 6px 20px rgba(255, 215, 0, 0.6);
+        }
+
+        .shuffle-btn:active {
+            transform: translate(-50%, -50%) scale(0.95);
+        }
+
+        @keyframes buttonPulse {
+            0%, 100% {
+                box-shadow: 0 4px 15px rgba(255, 215, 0, 0.4);
+            }
+            50% {
+                box-shadow: 0 6px 25px rgba(255, 215, 0, 0.7);
+            }
+        }
+
+        /* Footer */
+        .footer {
+            text-align: center;
+            margin-top: 0;
+            animation: fadeInUp 1s ease-out 1s both;
+        }
+
+        .footer h2 {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(1.4rem, 3.5vw, 2.8rem);
+            font-weight: 700;
+            color: #FFD700;
+            text-shadow: 
+                2px 2px 4px rgba(0, 0, 0, 0.4),
+                0 0 15px rgba(255, 215, 0, 0.6),
+                0 0 25px rgba(255, 215, 0, 0.4);
+            letter-spacing: 1.5px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            line-height: 1.2;
+            margin-top: 0;
+            transition: opacity 0.8s ease;
+        }
+
+        .footer.hidden {
+            display: none !important;
+        }
+
+        .footer h2 .heart-emoji {
+            font-size: 0.8em;
+            animation: heartBeat 1.5s infinite 0.75s;
+        }
+
+        /* Photo Filter Modal */
+        .photo-filter-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: transparent;
+            z-index: 1000;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            transition: opacity 0.5s ease;
+        }
+
+        .photo-filter-overlay.active {
+            display: flex;
+            opacity: 1;
+        }
+
+        .photo-filter-container {
+            position: relative;
+            width: 90%;
+            max-width: 800px;
+            height: 80vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .photo-filter-item {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            opacity: 0;
+            transform: scale(0.8);
+            transition: opacity 0.8s ease, transform 0.8s ease;
+        }
+
+        .photo-filter-item.active {
+            opacity: 1;
+            transform: scale(1);
+        }
+
+        .photo-filter-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            border-radius: 15px;
+            box-shadow: 0 10px 40px rgba(255, 215, 0, 0.3);
+        }
+
+        .photo-filter-item .corner-heart {
+            position: absolute;
+            font-size: 40px;
+            z-index: 5;
+            filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3));
+            animation: heartFloat 2s infinite ease-in-out;
+        }
+
+        .photo-filter-item .corner-heart.top-left {
+            top: -10px;
+            left: -10px;
+        }
+
+        .photo-filter-item .corner-heart.top-right {
+            top: -10px;
+            right: -10px;
+            animation-delay: 0.5s;
+        }
+
+        .photo-filter-item .corner-heart.bottom-left {
+            bottom: -10px;
+            left: -10px;
+            animation-delay: 1s;
+        }
+
+        .photo-filter-item .corner-heart.bottom-right {
+            bottom: -10px;
+            right: -10px;
+            animation-delay: 1.5s;
+        }
+
+        @keyframes heartFloat {
+            0%, 100% {
+                transform: translateY(0) scale(1);
+                opacity: 0.9;
+            }
+            50% {
+                transform: translateY(-10px) scale(1.1);
+                opacity: 1;
+            }
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .collage-images {
+                grid-template-columns: repeat(3, 1fr);
+                grid-template-rows: repeat(3, 1fr);
+            }
+            
+            .shuffle-btn {
+                width: 60px;
+                height: 60px;
+                font-size: 24px;
+            }
+
+            .header h1, .footer h2 {
+                gap: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="heart-background" id="heartBackground"></div>
+    
+    <div class="container">
+        <div class="header">
+            <h1><span class="heart-emoji">💕</span>Happy Anniversary Jaanu!<span class="heart-emoji">💕</span></h1>
+        </div>
+
+        <div class="heart-collage-container">
+            <div class="heart-outline" id="heartOutline">
+                <div class="collage-images" id="collageImages"></div>
+                <button class="shuffle-btn" id="shuffleBtn" title="View All Memories">💝</button>
+            </div>
+        </div>
+
+        <div class="footer">
+            <h2><span class="heart-emoji">💖</span>I Love You, My Princess<span class="heart-emoji">💖</span></h2>
+        </div>
+    </div>
+
+    <!-- Photo Filter Overlay -->
+    <div class="photo-filter-overlay" id="photoFilterOverlay">
+        <div class="photo-filter-container" id="photoFilterContainer"></div>
+    </div>
+
+    <script>
+        // List of images from pics folder - reordered with IMG_9003 first and IMG_1635 last
+        const allImages = [
+            'pics/3E829C32-E246-4A10-B956-0602104A5292.JPG',
+            'pics/af59a071-ae75-406a-8ad4-ddb26c4760ae.JPG',
+            'pics/c6649741-3121-4886-80cf-b1438d083260.JPG',
+            'pics/f1fba560-7005-489d-a423-4d668420f36c.JPG',
+            'pics/IMG_0031.jpeg',
+            'pics/IMG_0142.jpeg',
+            'pics/IMG_0183.jpeg',
+            'pics/IMG_0364.jpeg',
+            'pics/IMG_0603.jpeg',
+            'pics/IMG_0728.jpeg',
+            'pics/IMG_0827.jpeg',
+            'pics/IMG_1185.jpeg',
+            'pics/IMG_1218.jpeg',
+            'pics/IMG_1384.jpeg',
+            'pics/IMG_1568.jpeg',
+            'pics/IMG_2252.jpeg',
+            'pics/IMG_9035.PNG',
+            'pics/IMG_9040.jpeg',
+            'pics/IMG_9042.jpeg',
+            'pics/IMG_9059.jpeg',
+            'pics/IMG_9062.jpeg',
+            'pics/IMG_9132.jpeg',
+            'pics/IMG_9205.jpeg',
+            'pics/IMG_9246.jpeg',
+            'pics/IMG_9299.jpeg',
+            'pics/IMG_9340.jpeg',
+            'pics/IMG_9343.jpeg',
+            'pics/IMG_9371.jpeg',
+            'pics/IMG_9580.jpeg',
+            'pics/IMG_9781.jpeg',
+            'pics/IMG_9988.jpg',
+            'pics/PHOTO-2025-01-18-19-33-02.JPG'
+        ];
+
+        // Reorder: IMG_9003 first, IMG_1635 last
+        const images = ['pics/IMG_9003.jpeg', ...allImages, 'pics/IMG_1635.jpeg'];
+
+        // Create floating hearts background
+        function createFloatingHearts() {
+            const heartBackground = document.getElementById('heartBackground');
+            const heartSymbols = ['💖', '💕', '💗', '💓', '💝', '❤️', '🧡', '💛'];
+            
+            // Hearts rising from bottom
+            for (let i = 0; i < 40; i++) {
+                const heart = document.createElement('div');
+                heart.className = 'floating-heart';
+                heart.textContent = heartSymbols[Math.floor(Math.random() * heartSymbols.length)];
+                heart.style.left = Math.random() * 100 + '%';
+                heart.style.animationDelay = Math.random() * 20 + 's';
+                heart.style.animationDuration = (15 + Math.random() * 15) + 's';
+                heart.style.fontSize = (25 + Math.random() * 20) + 'px';
+                heartBackground.appendChild(heart);
+            }
+
+            // Hearts falling from top
+            for (let i = 0; i < 40; i++) {
+                const heart = document.createElement('div');
+                heart.className = 'floating-heart floating-heart-bottom';
+                heart.textContent = heartSymbols[Math.floor(Math.random() * heartSymbols.length)];
+                heart.style.left = Math.random() * 100 + '%';
+                heart.style.animationDelay = Math.random() * 20 + 's';
+                heart.style.animationDuration = (15 + Math.random() * 15) + 's';
+                heart.style.fontSize = (25 + Math.random() * 20) + 'px';
+                heartBackground.appendChild(heart);
+            }
+        }
+
+        // Initialize collage
+        const collageContainer = document.getElementById('collageImages');
+        let currentImages = [];
+        let shuffleInterval;
+
+        function shuffleArray(array) {
+            const shuffled = [...array];
+            for (let i = shuffled.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+            }
+            return shuffled;
+        }
+
+        function createCollage() {
+            const shuffledImages = shuffleArray(images);
+            const gridSize = window.innerWidth <= 768 ? 9 : 16; // 3x3 on mobile, 4x4 on desktop
+            const imagesToShow = shuffledImages.slice(0, gridSize);
+
+            collageContainer.innerHTML = '';
+            currentImages = imagesToShow;
+
+            imagesToShow.forEach((src, index) => {
+                const item = document.createElement('div');
+                item.className = 'collage-item';
+                
+                const img = document.createElement('img');
+                img.src = src;
+                img.alt = `Memory ${index + 1}`;
+                img.onerror = function() {
+                    this.style.display = 'none';
+                };
+                
+                item.appendChild(img);
+                collageContainer.appendChild(item);
+
+                // Staggered animation
+                setTimeout(() => {
+                    item.classList.add('active');
+                }, index * 100);
+            });
+        }
+
+        function shuffleCollage() {
+            const items = collageContainer.querySelectorAll('.collage-item');
+            
+            // Fade out current images
+            items.forEach((item, index) => {
+                setTimeout(() => {
+                    item.classList.remove('active');
+                }, index * 50);
+            });
+
+            // After fade out, create new collage
+            setTimeout(() => {
+                createCollage();
+            }, items.length * 50 + 300);
+        }
+
+        // Auto-shuffle on page load and then every 5 seconds
+        function startAutoShuffle() {
+            shuffleCollage();
+            shuffleInterval = setInterval(shuffleCollage, 5000);
+        }
+
+        // Photo filter functionality
+        let currentPhotoIndex = 0;
+        let photoFilterInterval;
+        const photoFilterOverlay = document.getElementById('photoFilterOverlay');
+        const photoFilterContainer = document.getElementById('photoFilterContainer');
+        const heartOutline = document.getElementById('heartOutline');
+        const header = document.querySelector('.header');
+        const footer = document.querySelector('.footer');
+
+        function showPhotoFilter() {
+            // Hide text (header and footer) immediately
+            header.style.display = 'none';
+            footer.style.display = 'none';
+            
+            // Fade out heart collage
+            heartOutline.classList.add('fade-out');
+            
+            setTimeout(() => {
+                // Hide heart collage
+                document.querySelector('.heart-collage-container').style.display = 'none';
+                
+                // Create photo filter slideshow
+                photoFilterContainer.innerHTML = '';
+                currentPhotoIndex = 0;
+                
+                images.forEach((src, index) => {
+                    const item = document.createElement('div');
+                    item.className = 'photo-filter-item';
+                    if (index === 0) item.classList.add('active');
+                    
+                    const img = document.createElement('img');
+                    img.src = src;
+                    img.alt = `Memory ${index + 1}`;
+                    img.onerror = function() {
+                        this.style.display = 'none';
+                    };
+                    
+                    // Add corner hearts
+                    const heartSymbols = ['💖', '💕', '💗', '💓'];
+                    heartSymbols.forEach((heart, i) => {
+                        const cornerHeart = document.createElement('div');
+                        cornerHeart.className = `corner-heart ${['top-left', 'top-right', 'bottom-left', 'bottom-right'][i]}`;
+                        cornerHeart.textContent = heart;
+                        item.appendChild(cornerHeart);
+                    });
+                    
+                    item.appendChild(img);
+                    photoFilterContainer.appendChild(item);
+                });
+                
+                // Show overlay
+                photoFilterOverlay.classList.add('active');
+                
+                // Start slideshow
+                photoFilterInterval = setInterval(() => {
+                    const items = photoFilterContainer.querySelectorAll('.photo-filter-item');
+                    if (items.length > 0) {
+                        items[currentPhotoIndex].classList.remove('active');
+                        currentPhotoIndex++;
+                        
+                        // If we've shown all photos, return to main page
+                        if (currentPhotoIndex >= items.length) {
+                            clearInterval(photoFilterInterval);
+                            setTimeout(() => {
+                                hidePhotoFilter();
+                            }, 800);
+                            return;
+                        }
+                        
+                        items[currentPhotoIndex].classList.add('active');
+                    }
+                }, 1500); // Change photo every 1.5 seconds
+                
+            }, 800);
+        }
+
+        function hidePhotoFilter() {
+            clearInterval(photoFilterInterval);
+            photoFilterOverlay.classList.remove('active');
+            
+            setTimeout(() => {
+                // Show text again
+                header.style.display = 'block';
+                footer.style.display = 'block';
+                
+                document.querySelector('.heart-collage-container').style.display = 'block';
+                setTimeout(() => {
+                    heartOutline.classList.remove('fade-out');
+                }, 100);
+            }, 500);
+        }
+
+        // Manual shuffle button - now shows photo filter
+        document.getElementById('shuffleBtn').addEventListener('click', () => {
+            if (photoFilterOverlay.classList.contains('active')) {
+                hidePhotoFilter();
+            } else {
+                clearInterval(shuffleInterval);
+                showPhotoFilter();
+            }
+        });
+
+        // Close photo filter on click outside (only if not auto-closing)
+        photoFilterOverlay.addEventListener('click', (e) => {
+            if (e.target === photoFilterOverlay) {
+                hidePhotoFilter();
+            }
+        });
+
+        // Initialize
+        createFloatingHearts();
+        createCollage();
+        
+        // Start auto-shuffle after initial load
+        setTimeout(startAutoShuffle, 3000);
+    </script>
+</body>
+</html>
